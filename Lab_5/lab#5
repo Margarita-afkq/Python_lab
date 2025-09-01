@@ -1,0 +1,56 @@
+import re
+import csv
+
+# Task 1
+with open('task1_ru.txt', 'r', encoding='utf-8') as file:
+    text1 = file.read()
+
+words_with_comma = re.findall(r'\b\w+\b(?=,)', text1)
+square_brackets = re.findall(r'\[(.*?)\]', text1)
+
+print("Слова после запятой:", words_with_comma)
+print("Информация в квадратных скобках:", square_brackets)
+
+# Task 2
+with open('task2.html', 'r', encoding='utf-8') as file:
+    html_text = file.read()
+
+color_hex = re.findall(r'#(?:[0-9a-fA-F]{3}){1,2}', html_text)
+color_rgb = re.findall(r'rgb\([^)]+\)', html_text)
+color_rgba = re.findall(r'rgba\([^)]+\)', html_text)
+color_names = re.findall(r'\b(?:red|green|blue|black|white|yellow|purple|orange|pink|brown|gray|grey|cyan|magenta|silver|gold|maroon|navy|teal|olive|lime|aqua|fuchsia)\b', html_text, re.IGNORECASE)
+
+all_colors = color_hex + color_rgb + color_rgba + color_names
+print("Обозначения цветов:", all_colors)
+
+# Task 3
+with open('task3.txt', 'r', encoding='utf-8') as file:
+    table_data = file.readlines()
+
+id_pattern = r'\b\d+\b'
+name_pattern = r'\b[A-ZА-Я][a-zа-я]+\b'
+email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+date_pattern = r'\b\d{2}[./-]\d{2}[./-]\d{4}\b|\b\d{4}[./-]\d{2}[./-]\d{2}\b'
+url_pattern = r'\bhttps?://[^\s]+\b'
+
+results = []
+
+for line in table_data:
+    line = line.strip()
+    if line:
+        ids = re.findall(id_pattern, line)
+        names = re.findall(name_pattern, line)
+        emails = re.findall(email_pattern, line)
+        dates = re.findall(date_pattern, line)
+        urls = re.findall(url_pattern, line)
+        
+        if ids and names and emails and dates and urls:
+            results.append([ids[0], names[0], emails[0], dates[0], urls[0]])
+
+with open('result.csv', 'w', encoding='utf-8', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['ID', 'Фамилия', 'Email', 'Дата регистрации', 'Сайт'])
+    writer.writerows(results)
+
+print("Таблица сохранена в result.csv")
+print("Количество обработанных записей:", len(results))
