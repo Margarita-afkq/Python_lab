@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 def image_processing():
-    img = cv2.imread('images/variant-<номер варианта>.jpg')
+    img = cv2.imread('images/variant-3.jpeg')
     img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     cv2.imshow('HSV Image', img_hsv)
     cv2.waitKey(0)
